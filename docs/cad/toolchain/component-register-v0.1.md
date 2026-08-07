@@ -4,7 +4,7 @@
 
 Track the software, integrations, source formats, and reusable design infrastructure that make up the Project MicroShop CAD toolchain.
 
-This register records component identity and role. Exact versions, installation methods, and compatibility notes belong in the CAD Toolchain Baseline.
+This register records component identity and role. Exact versions, installation methods, and compatibility notes belong in the CAD Toolchain Baseline or linked compatibility records.
 
 ## Components
 
@@ -18,13 +18,18 @@ This register records component identity and role. Exact versions, installation 
 | Fasteners workbench or equivalent | Reusable standard hardware | active / version verification pending |
 | UnistrutWB / Project MicroShop Unistrut assets | Reusable structural framing geometry | active development |
 | Python macros and scripts | Automation, export, and helper operations | active development |
-| FreeCAD MCP server | External interaction and automation layer | setup tracked by MS-SW-001 |
+| FreeCAD MCP server | External interaction and automation layer | active; setup tracked by MS-SW-001 |
 | GitHub repository | Durable engineering record | active |
 | FCStd | Authoritative native model format | active |
 | STEP | Neutral solid interchange | active |
 | STL / 3MF | Fabrication-oriented mesh export | as required |
 | DXF | 2D fabrication/interchange output | as required |
 | SVG / drawing outputs | Documentation and layout output | as required |
+
+## Compatibility Records
+
+- `compatibility/freecad-1.1.3-robust-mcp-0.6.2-unistrutwb-namespace-collision.md` — resolved addon namespace collision between Robust MCP Bridge and UnistrutWB
+- `freecad-mcp-runbook-v0.1.md` — operational MCP startup, validation, recovery, and upgrade guidance
 
 ## Register Rules
 
@@ -33,6 +38,7 @@ This register records component identity and role. Exact versions, installation 
 - Experimental components should be marked explicitly.
 - A reusable component should not be promoted to program infrastructure until it has survived use outside its originating build.
 - Generated exports do not replace native source models or source parameters.
+- Known local patches must be linked to a compatibility note and revalidated after upgrades or reinstalls.
 
 ## Planned Companion Outputs
 
