@@ -14,10 +14,16 @@ Verified combination:
 - Robust MCP Bridge 0.6.2
 - UnistrutWB present and functional
 - XML-RPC connectivity verified
+- external `freecad-mcp` functional
+- Codex CLI integration functional from a project-scoped CAD workspace
 
 Known local compatibility patch:
 
 `docs/cad/toolchain/compatibility/freecad-1.1.3-robust-mcp-0.6.2-unistrutwb-namespace-collision.md`
+
+General startup and session-continuity procedure:
+
+`docs/cad/toolchain/codex-mcp-startup-continuity-v0.1.md`
 
 ## Startup Check
 
@@ -52,6 +58,21 @@ GUI available: 1
 
 Treat a successful transport check as necessary but not sufficient. Also verify that target workbenches and representative geometry operate normally.
 
+## Codex Workspace Startup
+
+Launch Codex from the CAD portion of the Project MicroShop repository or a narrower build-local CAD directory rather than from a broad home-directory context.
+
+Example:
+
+```bash
+cd /path/to/projectMicroShop/cad
+codex
+```
+
+Project-local trust is preferred. The FreeCAD installation and addon repositories do not need to be inside the trusted Codex workspace.
+
+When opening an unfamiliar document, begin with read-only inspection before modifying geometry.
+
 ## Representative Functional Smoke Test
 
 For the current MicroShop toolchain:
@@ -61,7 +82,8 @@ For the current MicroShop toolchain:
 3. Load UnistrutWB.
 4. Create or render representative P1000/P4100 geometry.
 5. Run the external MCP connectivity check.
-6. Confirm no startup or deferred-import errors appear.
+6. Launch Codex from the intended project-scoped workspace if AI-assisted CAD will be used.
+7. Confirm no startup or deferred-import errors appear.
 
 ## Known Failure: Generic `commands` Namespace Collision
 
@@ -122,6 +144,8 @@ Also revalidate after:
 - UnistrutWB packaging changes
 - addon directory changes
 - Python environment changes
+- external `freecad-mcp` changes
+- Codex/MCP configuration changes
 
 ## Failure Isolation Order
 
@@ -132,9 +156,21 @@ When MCP integration fails, separate the layers:
 3. **Bridge state** — does the MCP bridge report running?
 4. **Transport** — does `freecad-mcp --check --mode xmlrpc` succeed?
 5. **CAD function** — can representative MicroShop geometry be created or queried?
-6. **Automation client** — only after the lower layers are known-good, troubleshoot the external MCP client.
+6. **Automation client** — only after the lower layers are known-good, troubleshoot Codex or another external MCP client.
 
 Do not treat an automation-client error as evidence that the FreeCAD addon itself is broken until the lower layers have been checked.
+
+## Session Continuity
+
+For AI-assisted CAD work, repository files are the durable handoff mechanism.
+
+Use, where appropriate:
+
+- `AGENTS.md` for standing CAD/toolchain instructions
+- build-local `README.md` for stable project context
+- build-local `STATUS.md` for current handoff state and next actions
+
+Conversation history is supplemental rather than canonical.
 
 ## Source-of-Truth Doctrine
 
@@ -146,6 +182,7 @@ Authoritative project state remains in:
 - parameters and measurement registers
 - reusable scripts
 - repository documentation
+- external source/provenance material when a design originates outside FreeCAD
 
 The MicroShop CAD workflow must remain recoverable without MCP where practical.
 
