@@ -2,16 +2,16 @@
 
 **Project:** Project MicroShop  
 **Owner task:** MS-CAD-002 — CAD Toolchain + Parametric Modeling Infrastructure  
-**Baseline date:** 2026-08-01  
-**Status:** Provisional baseline; runtime captured, add-on and MCP verification pending
+**Baseline date:** 2026-08-09  
+**Status:** Operational baseline; selected add-on metadata and assembly standardization remain pending
 
 ## Purpose
 
-Record the actual known CAD environment, explicitly distinguish confirmed state from unverified carry-over state, and provide a compatibility reference for MS-SW-001 and MS-CAD-001.
+Record the actual known CAD environment, explicitly distinguish confirmed state from unresolved metadata, and provide a reproducible compatibility reference for MicroShop CAD work.
 
-This document does not infer installed state from upstream release history. Unknown local values remain unknown until captured from the running FreeCAD process.
+This document does not infer installed state from upstream release history. Unknown local values remain unknown until captured from the running environment.
 
-## Baseline Summary
+## Verified Baseline Summary
 
 | Layer | Baseline state | Verification state |
 |---|---|---|
@@ -21,31 +21,31 @@ This document does not infer installed state from upstream release history. Unkn
 | Previous distribution | Snap package removed | confirmed; no longer baseline |
 | FreeCAD version/build | **1.1.3.20260725 (Git shallow) AppImage** | confirmed |
 | FreeCAD build date | 2026-07-25 04:52:02 | confirmed |
-| FreeCAD build type | Release | confirmed |
 | FreeCAD commit | `145529fe741292ff0b3977a01195bf0247425794` | confirmed |
 | Bundled FreeCAD Python | **3.11.14** | confirmed |
 | Qt / PySide | Qt 6.8.3 / PySide 6.8.3 | confirmed |
 | OCC | 7.8.1 | confirmed |
-| Part Design | built-in program-required workbench | functional verification pending |
-| Part | built-in program-required workbench | functional verification pending |
-| Spreadsheet | built-in program-required workbench | functional verification pending |
 | Assembly workflow | Assembly3 0.12.3 installed; program selection not frozen | installation confirmed |
-| Fasteners workbench | previously used | not listed in captured installed-mod block; verification pending |
-| UnistrutWB | Project MicroShop reusable workbench/assets maintained in a separate repository with user-space linkage | linkage/load verification pending |
-| Python macros/scripts | active project capability | runtime now anchored to Python 3.11.14 |
-| MCP implementation | `spkane/freecad-addon-robust-mcp-server` | selected by MS-SW-001; not yet smoke-tested in current environment |
-| MCP release target | Robust MCP Server / Bridge Workbench v0.6.2 | target; installed state not assumed |
-| MCP transport target | XML-RPC | preferred default |
-| MCP default ports | 9875 XML-RPC; 9876 JSON-RPC socket | upstream defaults |
-| GitHub engineering record | `cruelmillenial/projectMicroShop`, default branch `main` | confirmed |
-| Native CAD source | FCStd | authoritative model format |
-| Neutral solid export | STEP | interchange output |
+| Fasteners workbench | previously used | exact current version pending |
+| UnistrutWB | Project MicroShop reusable workbench/assets maintained separately | functional coexistence with MCP validated; exact version/commit pending |
+| Robust MCP Bridge | **0.6.2** | installed and validated |
+| MCP transport | XML-RPC on `localhost:9875` | connectivity validated |
+| MCP secondary endpoint | socket/JSON-RPC on `localhost:9876` | bridge reports endpoint; XML-RPC remains validated path |
+| external `freecad-mcp` | installed | successful connection check |
+| Codex CLI | **0.147.0** | confirmed by `codex --version` |
+| Zoo CLI | **0.2.187** at `/usr/local/bin/zoo` | confirmed by `zoo --version` |
+| Git | **2.43.0** | confirmed by `git --version` |
+| KCL → Zoo → STEP | working project capability | successful export demonstrated in lathe-cabinet PoC |
+| GitHub engineering record | `cruelmillenial/projectMicroShop`, branch `main` | confirmed |
+| Native FreeCAD source | FCStd | authoritative for FreeCAD-native designs |
+| KCL source | KCL project files | authoritative for KCL-first designs |
+| Neutral solid export | STEP | generated interchange/review geometry |
 | Fabrication mesh | STL / 3MF | generated as required |
 | 2D fabrication/interchange | DXF | generated as required |
 
-## Captured Runtime
+## Captured FreeCAD Runtime
 
-The production runtime was captured directly from **Help → About FreeCAD → Copy to clipboard** on 2026-08-01:
+The production runtime was captured directly from FreeCAD:
 
 ```text
 OS: Ubuntu 24.04.4 LTS (KDE/plasma/xcb)
@@ -53,210 +53,185 @@ Architecture: x86_64
 Version: 1.1.3.20260725 (Git shallow) AppImage
 Build date: 2026/07/25 04:52:02
 Build type: Release
-Branch: grafted,grafted
 Hash: 145529fe741292ff0b3977a01195bf0247425794
 Python 3.11.14, Qt 6.8.3, Coin 4.0.3, Vtk 9.3.1, boost 1_86, Eigen3 3.4.0, PySide 6.8.3
 shiboken 6.8.3, xerces-c 3.3.0, IfcOpenShell 0.8.4, OCC 7.8.1
-Locale: English/United States (en_US)
-Navigation Style/Orbit Style/Rotation Mode: CAD/Rounded Arcball/Window center
-Stylesheet/Theme/QtStyle: FreeCAD.qss/FreeCAD Dark/
-Logical DPI/Physical DPI/Pixel Ratio: 96/156.308/1
 Installed mods:
   * Assembly3 0.12.3
 ```
 
-This runtime block is authoritative for the v0.1 local software baseline unless superseded by a deliberate update.
+This runtime block is authoritative for the v0.1 FreeCAD baseline unless superseded by a deliberate update.
+
+## Verified External Tooling
+
+### MCP connectivity
+
+Validated command:
+
+```bash
+freecad-mcp --check --mode xmlrpc
+```
+
+Validated result:
+
+```text
+Testing connection to FreeCAD (xmlrpc mode)...
+  Host: localhost:9875
+✓ Connection successful!
+  FreeCAD version: 1.1.3
+  GUI available: 1
+```
+
+The explicit `--mode xmlrpc` remains the preferred validation path.
+
+### Codex CLI
+
+```text
+codex-cli 0.147.0
+```
+
+Codex is used as an external agent from a project-scoped trusted CAD workspace. Repository files, not conversation state, are the durable project memory.
+
+### Zoo CLI
+
+```text
+zoo 0.2.187
+```
+
+Installed executable:
+
+```text
+/usr/local/bin/zoo
+```
+
+Zoo has successfully executed a KCL-first design workflow through STEP generation in the lathe-cabinet proof of concept.
+
+### Git
+
+```text
+git version 2.43.0
+```
+
+Git and the public GitHub repository provide the durable synchronization layer between CAD sessions, agents, and PM documentation.
 
 ## Distribution Decision
 
 The program baseline is the **FreeCAD 1.1.3 AppImage installation managed by Gear Lever**, not the removed Snap package.
 
-Reasoning:
+The AppImage provides a clear application-version boundary while project add-ons and reusable repositories remain user-space assets rather than being owned by the application package.
 
-- the Snap package has been intentionally retired,
-- the AppImage installation launches successfully,
-- the actual running build has now been captured,
-- an AppImage provides a clear program version boundary,
-- Project MicroShop add-ons and reusable repositories should remain user-space assets rather than being owned by the application package.
+Gear Lever update and rollback policy remains a follow-on documentation item.
 
-Gear Lever configuration, update behavior, application-data placement, and rollback/update policy remain a follow-on review item.
+## FreeCAD / MCP Compatibility State
 
-## FreeCAD Version Policy at v0.1
+Robust MCP Bridge 0.6.2 and UnistrutWB have been demonstrated to coexist under FreeCAD 1.1.3 after resolving a Python namespace collision.
 
-Freeze **FreeCAD 1.1.3.20260725**, commit `145529fe741292ff0b3977a01195bf0247425794`, as the CAD runtime for the v0.1 baseline.
+Both addons exposed a generic top-level `commands` module/package. The local Robust MCP installation was patched by renaming its `commands.py` module to `robust_mcp_commands.py` and updating its internal imports.
 
-Do not move active build work onto weekly/development builds by default. A future stable upgrade should be treated as a controlled toolchain change and checked against active models and critical add-ons before becoming the new baseline.
+Validation after the patch included:
 
-## Runtime Capture Gate
+- FreeCAD startup without the namespace error,
+- UnistrutWB P1000/P4100 generation,
+- MCP bridge status operating,
+- successful external XML-RPC connectivity.
 
-**Complete for v0.1.**
+The workaround is documented separately under the CAD toolchain compatibility records and MCP runbook. Updating or reinstalling Robust MCP may overwrite the patch and therefore triggers revalidation.
 
-The following are now captured:
+## Source-of-Truth Patterns
 
-- FreeCAD release and build identifier,
-- commit hash,
-- bundled Python version,
-- Qt/PySide versions,
-- application architecture,
-- core dependency versions,
-- reported installed add-ons.
+The program currently supports two legitimate CAD source patterns.
 
-For deeper diagnostics, the Python console can still be used to capture user application-data paths and the workbench registry:
+### FreeCAD-native
 
-```python
-import sys
-import FreeCAD as App
-import FreeCADGui as Gui
-
-print("FreeCAD:", App.Version())
-print("Python:", sys.version)
-print("UserAppData:", App.getUserAppDataDir())
-print("ResourceDir:", App.getResourceDir())
-print("Workbenches:", sorted(Gui.listWorkbenches().keys()))
+```text
+parameters / measurements
+        ↓
+FCStd authoritative model
+        ↓
+STEP / STL / 3MF / DXF generated outputs
 ```
 
-That information is useful for the Gear Lever/add-on review but is no longer required to identify the running FreeCAD build.
+### KCL-first
 
-## Add-on Verification Gate
+```text
+KCL authoritative project
+        ↓
+Zoo execution
+        ↓
+STEP generated snapshot
+        ↓
+FreeCAD inspection / downstream work as required
+```
 
-After the AppImage migration, verify rather than assume persistence of add-on state.
+Generated STEP geometry must not silently replace the authoritative KCL source for a KCL-first design.
 
-The About block reports only:
+## Reusable Tooling
 
-- **Assembly3 0.12.3**
+`cad/tools/cad-export` is a demonstrated shared CAD helper for KCL/Zoo export work.
 
-Absence from that list is not by itself proof that a manually linked or otherwise user-space workbench is unavailable. UnistrutWB and Fasteners therefore remain verification items rather than being declared missing.
+The successful lathe-cabinet proof of concept established that generated outputs should normally remain local to the design lineage that generated them rather than being globally segregated by file format.
 
-### UnistrutWB
-
-Expected architecture:
-
-- source repository exists outside the FreeCAD package,
-- FreeCAD user-space workbench path links or points to that repository,
-- removing the old Snap package must not be treated as removing authoritative UnistrutWB source.
-
-Verification required:
-
-- workbench appears in the current AppImage,
-- module imports without error,
-- one known P1000/P4100 object regenerates successfully,
-- existing JSON/profile configuration is found from the expected source location,
-- BOM export still executes if currently implemented.
-
-### Fasteners
-
-Verify:
-
-- workbench is present,
-- version/source is captured,
-- a representative fastener inserts and recomputes successfully.
+## Assembly and Add-on State
 
 ### Assembly
 
-Assembly3 **0.12.3** is confirmed installed under the current AppImage.
+Assembly3 **0.12.3** is confirmed installed. This records availability only; it does not freeze Assembly3 as the program-wide preferred assembly workflow.
 
-This confirms availability, not program-wide preference. Selection of the preferred assembly workflow remains a separate MS-CAD-002 standardization decision.
+### UnistrutWB
 
-## MCP Baseline
+Functional coexistence with the current FreeCAD/MCP environment has been demonstrated through representative P1000/P4100 generation.
 
-MS-SW-001 selected `spkane/freecad-addon-robust-mcp-server` as the MCP implementation.
+Exact repository version/commit remains pending capture.
 
-Current upstream architecture separates:
+### Fasteners
 
-1. **Robust MCP Bridge Workbench** inside FreeCAD, and
-2. **Robust MCP Server** used by the external MCP-capable client.
+Fasteners has been used previously in the MicroShop CAD environment, but the exact current installed version/source has not yet been captured. This is an unresolved metadata field, not a blocker to publishing D1.
 
-For v0.1 the target is:
+## Operational Doctrine
 
-- Robust MCP Server v0.6.2,
-- Robust MCP Bridge Workbench v0.6.2,
-- XML-RPC transport as the default,
-- bridge on `localhost:9875`,
-- JSON-RPC socket retained as fallback on `localhost:9876`,
-- external server environment using Python 3.11 as required by the implementation.
+- MCP is an automation layer, not authoritative CAD state.
+- Manual FreeCAD operation remains a recovery path.
+- KCL source remains authoritative for KCL-first projects.
+- Generated interchange geometry must retain clear provenance.
+- Codex sessions are working contexts; repository artifacts are durable context.
+- Toolchain upgrades should trigger targeted revalidation rather than silent baseline drift.
+- Existing physical models should not be rewritten merely to conform to standards that have not demonstrated practical value.
 
-The FreeCAD runtime itself is now confirmed to bundle Python **3.11.14**, removing one previously unknown compatibility variable. The external MCP server environment remains separately managed and must still be verified.
+## Known Open Items
 
-The MCP layer remains optional automation. It is not authoritative CAD state and is not a prerequisite for manual FreeCAD modeling.
-
-### MCP activation gate
-
-Do not mark MS-SW-001 complete until all of the following are demonstrated against the actual AppImage baseline:
-
-1. Robust MCP Bridge installed and visible,
-2. bridge starts cleanly,
-3. XML-RPC listener is reachable locally,
-4. MCP server starts under its intended Python 3.11 environment,
-5. `get_connection_status` succeeds,
-6. `get_freecad_version` returns FreeCAD 1.1.3.20260725 / the recorded runtime,
-7. a read-only document/object query succeeds,
-8. a reversible write test creates and deletes a disposable object,
-9. normal GUI modeling remains usable with MCP stopped.
-
-## Comparison: MS-SW-001
-
-**Result: aligned, with implementation details needing refresh.**
-
-The existing MS-SW-001 architecture remains correct:
-
-- MCP is local/external automation,
-- it must not become the crane project's critical path,
-- manual FreeCAD remains the fallback,
-- predictable object/document naming improves automation reliability.
-
-Required updates to the task when work resumes:
-
-- use the current split Bridge Workbench + MCP Server architecture,
-- target v0.6.2 unless a newer release is deliberately adopted,
-- anchor testing to FreeCAD 1.1.3.20260725 / Python 3.11.14,
-- prefer XML-RPC first,
-- use the activation gate above as the smoke-test definition.
-
-No redesign of CAD models is required for MCP.
-
-## Comparison: MS-CAD-001
-
-**Result: strongly aligned; no corrective redesign required.**
-
-MS-CAD-001 already establishes the correct authority hierarchy:
-
-1. actual crane measurements,
-2. simplified parametric FreeCAD geometry derived from those measurements,
-3. manual/reference dimensions as secondary evidence,
-4. imported generic models as non-authoritative mannequins.
-
-That is consistent with the MS-CAD-002 modeling doctrine.
-
-The crane task should continue independently of MCP. When D2 is mature enough to prove useful, MS-CAD-001 may adopt shared naming, datum, parameter-register, and validation conventions prospectively. Existing geometry should not be rewritten merely for conformity.
-
-## Baseline Risks / Open Items
-
-| Item | Risk | Action |
+| Item | State | Required action |
 |---|---|---|
-| Gear Lever configuration/update policy not yet documented | an automatic or opaque update could move the CAD runtime unexpectedly | review Gear Lever next session and define update/rollback policy |
-| UnistrutWB linkage not yet verified in AppImage | reusable structural library may not be visible after package migration | execute UnistrutWB verification gate |
-| Fasteners state not yet verified | standard hardware workflow may be unavailable or version-uncertain | verify presence and capture version/source |
-| Assembly workflow not selected | cross-build assembly practice may fragment | compare available/built-in options against Assembly3 before freezing D2 assembly doctrine |
-| MCP not smoke-tested | automation cannot yet be treated as available capability | execute MS-SW-001 activation gate |
+| Gear Lever update/rollback policy | pending | document before relying on unattended application updates |
+| UnistrutWB exact version/commit | pending metadata | capture when convenient |
+| Fasteners exact version/source | pending metadata | capture when convenient |
+| Preferred assembly workflow | not standardized | evaluate when an actual multi-part build makes the choice consequential |
+| Robust MCP namespace workaround | validated local patch | revalidate after MCP update/reinstall |
+| KCL → STEP → FreeCAD round-trip | STEP generation proven; downstream inspection remains workflow-dependent | validate when next required by a build |
 
-## Freeze Criteria
+## Revalidation Triggers
 
-The **FreeCAD runtime portion** of D1 is frozen at 1.1.3.20260725.
+Recheck the affected portions of this baseline after:
 
-Change the overall D1 status from **Provisional** to **Frozen v0.1** when:
+- FreeCAD AppImage upgrade or replacement,
+- Robust MCP update or reinstall,
+- UnistrutWB update,
+- Zoo CLI update,
+- Codex CLI change that affects MCP behavior,
+- assembly-workbench standardization,
+- significant changes to `cad/tools/cad-export`,
+- migration to a different host or FreeCAD packaging method.
 
-- required core workbenches are confirmed functional,
-- UnistrutWB linkage is verified,
-- Fasteners state is recorded,
-- assembly state is recorded and its role understood even if the preferred workflow remains undecided,
-- Gear Lever update/rollback behavior is documented sufficiently to preserve the runtime baseline,
-- MS-SW-001 either passes its MCP smoke test or is explicitly marked unavailable/optional for this baseline.
+## D1 Status
+
+**D1 — CAD Toolchain Baseline v0.1 is published and operational.**
+
+The remaining unresolved fields are deliberately recorded as pending metadata or future standardization decisions. They do not prevent the current toolchain from serving as the program baseline.
 
 ## Source Relationships
 
-- MS-CAD-002 thread init defines this document and its version-aware doctrine.
-- `docs/architecture/cad-toolchain-v0.1.md` defines the source-of-truth architecture.
-- `docs/cad/toolchain/component-register-v0.1.md` identifies toolchain components whose versions belong here.
-- `docs/cad/library/component-register-v0.1.md` tracks reusable physical CAD assets separately from software components.
-- MS-SW-001 owns MCP environment setup and smoke testing.
-- MS-CAD-001 owns the Harbor Freight crane measurement-driven application model.
+- MS-CAD-002 defines this deliverable and its version-aware doctrine.
+- `docs/architecture/cad-toolchain-v0.2.md` describes the wider CAD source architecture.
+- `docs/cad/toolchain/freecad-mcp-runbook-v0.1.md` contains operating and recovery procedures.
+- CAD toolchain compatibility records document the Robust MCP / UnistrutWB collision workaround.
+- CAD toolchain checkpoints record the KCL/Zoo/STEP proof of concept.
+- `cad/lathe_cabinet/` provides the first working KCL-first application case.
