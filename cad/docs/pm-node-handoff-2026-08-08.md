@@ -50,9 +50,9 @@ revision pending.**
    ventilation, swarf exclusion, cable routing, and service access.
 5. Do not release the variant for fabrication until those checks are closed.
 
-## Repository action in progress
+## Repository action completed
 
-The local CAD artifacts are being committed first, then the branch is being
-rebased onto `origin/main`, which already contains the broader CAD toolchain and
-PM documentation. This ordering protects the recovered untracked work before
-history reconciliation.
+The local CAD artifacts were committed and the branch was rebased cleanly onto
+`origin/main`, which already contained the broader CAD toolchain and PM
+documentation. The recovered work is now preserved in Git with no remaining
+untracked files.

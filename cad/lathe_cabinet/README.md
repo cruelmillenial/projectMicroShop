@@ -86,12 +86,12 @@ Generated exports must not become the only surviving representation of authorita
 
 The current fork is a proof-of-concept, not a fabrication-ready design.
 
-The source has passed a static local import check, but the fork has not yet completed:
+The source has passed a static local import check and has been executed by Zoo.
+A repeatable wrapper produced a validated STEP snapshot. The fork still needs:
 
-- Zoo KCL execution
-- STEP export
 - FreeCAD import and visual validation
 - replacement of provisional motor/drive dimensions with measured hardware dimensions
+- structural, guarding, cooling, swarf-exclusion, and service-access review
 
 See:
 

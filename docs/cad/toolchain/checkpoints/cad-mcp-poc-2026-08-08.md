@@ -4,7 +4,7 @@
 
 **Type:** Toolchain / workflow checkpoint  
 **Scope:** MS-CAD-002 — CAD Toolchain + Parametric Modeling Infrastructure  
-**Status:** Partial success; KCL editing and project restructuring complete, Zoo execution/export pending
+**Status:** KCL editing, project restructuring, Zoo execution, and STEP export complete; FreeCAD validation pending
 
 ## Purpose
 
@@ -104,14 +104,13 @@ The session performed a static KCL source check:
 - all local KCL imports resolved to files in the project
 - the assembly source references the motor shelf, motor keep-out, drive chase, and relocated mobility keep-out
 
-No local KCL execution or rendering engine was available during this session.
+Zoo subsequently executed the fork and produced a 193,003-byte STEP snapshot at
+`cad/lathe_cabinet/motor-under-lathe/exports/output.step`. The snapshot has the
+expected ISO-10303-21 header and trailer.
 
-Therefore the fork has **not** yet been:
-
-- executed by the Zoo geometry engine
-- rendered and visually checked
-- exported to a new STEP file
-- imported into FreeCAD for geometric validation
+The remaining validation is to import the snapshot into FreeCAD, inspect the
+geometry and clearances, and replace provisional drive dimensions with measured
+hardware inputs.
 
 ## KCL → Zoo → FreeCAD Workflow
 
@@ -174,15 +173,15 @@ Representative export shape:
 
 Exact CLI syntax must be verified against the installed Zoo CLI version before the command is standardized.
 
-## Proposed Repository Wrapper
+## Repository Wrapper
 
-Candidate output:
+Implemented at:
 
 ```text
 tools/cad-export
 ```
 
-Desired behavior:
+Current behavior:
 
 1. Resolve KCL project and output directories.
 2. Refuse unsafe or unrelated overwrites.
@@ -193,7 +192,8 @@ Desired behavior:
 7. Optionally retain named or timestamped variants.
 8. Optionally call `FreeCADCmd` for a headless STEP import check.
 
-The wrapper should be developed only after the manual export path has been proven.
+Items 1–6 are implemented. Named history and a headless FreeCAD check remain
+optional extensions.
 
 ## Codex / MCP Continuity Model
 
@@ -257,9 +257,9 @@ The CAD architecture and repository standards should therefore describe the **au
 
 **Code-based fork:** present locally  
 **Static import check:** passed  
-**Zoo execution:** pending  
-**STEP export of fork:** pending  
-**FreeCAD visual/geometric validation:** pending  
+**Zoo execution:** passed
+**STEP export of fork:** passed
+**FreeCAD visual/geometric validation:** pending
 **Measured motor/drive inputs:** pending
 
-The next meaningful toolchain milestone is a successful, repeatable KCL → STEP → FreeCAD round trip.
+The next meaningful toolchain milestone is FreeCAD import and visual/geometric validation.
