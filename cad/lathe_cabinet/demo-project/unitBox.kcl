@@ -1,0 +1,35 @@
+// Unit box primitive
+// Origin-centered solver cube used by fabrication-oriented rectangular parts.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+unitBoxSketch = sketch(on = XY) {
+  lowerEdge = line(start = [var -0.5in, var -0.5in], end = [var 0.5in, var -0.5in])
+  rightEdge = line(start = [var 0.5in, var -0.5in], end = [var 0.5in, var 0.5in])
+  upperEdge = line(start = [var 0.5in, var 0.5in], end = [var -0.5in, var 0.5in])
+  leftEdge = line(start = [var -0.5in, var 0.5in], end = [var -0.5in, var -0.5in])
+
+  coincident([lowerEdge.end, rightEdge.start])
+  coincident([rightEdge.end, upperEdge.start])
+  coincident([upperEdge.end, leftEdge.start])
+  coincident([leftEdge.end, lowerEdge.start])
+  coincident([lowerEdge.start, [-0.5in, -0.5in]])
+  horizontal(lowerEdge)
+  vertical(rightEdge)
+  horizontal(upperEdge)
+  vertical(leftEdge)
+  horizontalDistance([lowerEdge.start, lowerEdge.end]) == 1in
+  verticalDistance([rightEdge.start, rightEdge.end]) == 1in
+}
+
+unitBoxRegion = region(
+  segments = [
+    unitBoxSketch.lowerEdge,
+    unitBoxSketch.rightEdge
+  ],
+  intersectionIndex = -1,
+  direction = CCW,
+)
+unitBoxBody = extrude(unitBoxRegion, length = 1in, symmetric = true)
+unitBoxSketchHidden = hide(unitBoxSketch)
+
+export unitBoxExport = unitBoxBody

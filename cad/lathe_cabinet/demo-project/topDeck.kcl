@@ -1,0 +1,17 @@
+// Doubled plywood top deck
+// Full base-length deck seated on the cheek-panel top edges.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+topDeckPart = clone(unitBox)
+  |> scale(
+       x = baseLength / 1in,
+       y = topDepth / 1in,
+       z = topDeckThickness / 1in,
+       global = true,
+     )
+  |> appearance(color = plywoodColor, roughness = 70, metalness = 0)
+
+export topDeckExport = topDeckPart

@@ -1,0 +1,75 @@
+// Plywood lathe base assembly
+// Open-front plinth with trapezoidal end cheeks, rear shear panel, top stack, and reference envelopes.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import cheekPanelExport as cheekPanelPart from "cheekPanel.kcl"
+import lowerBallastShelfExport as lowerBallastShelfPart from "lowerBallastShelf.kcl"
+import rearShearPanelExport as rearShearPanelPart from "rearShearPanel.kcl"
+import topDeckExport as topDeckPart from "topDeck.kcl"
+import butcherBlockExport as butcherBlockPart from "butcherBlock.kcl"
+import chipTrayExport as chipTrayPart from "chipTray.kcl"
+import latheEnvelopeExport as latheEnvelopePart from "latheEnvelope.kcl"
+import spindleCenterlineExport as spindleCenterlinePart from "spindleCenterline.kcl"
+import levelingFootBlockExport as levelingFootBlockPart from "levelingFootBlock.kcl"
+import reservedChassisEnvelopeExport as reservedChassisEnvelopePart from "reservedChassisEnvelope.kcl"
+
+leftDoubledTrapezoidalCheekPanel = cheekPanelPart
+  |> translate(x = cheekPanelThickness / 2, z = cheekHeight / 2, global = true)
+rightDoubledTrapezoidalCheekPanel = clone(leftDoubledTrapezoidalCheekPanel)
+  |> translate(x = baseLength - cheekPanelThickness, global = true)
+
+lowerBallastShelf = lowerBallastShelfPart
+  |> translate(x = baseLength / 2, z = lowerShelfTopZ - (plywoodThickness / 2), global = true)
+fullRearShearPanel = rearShearPanelPart
+  |> translate(
+       x = baseLength / 2,
+       y = topDepth / 2 - (rearShearPanelThickness / 2),
+       z = lowerShelfTopZ + rearShearPanelHeight / 2,
+       global = true,
+     )
+doubledPlywoodTopDeck = topDeckPart
+  |> translate(x = baseLength / 2, z = topDeckCenterZ, global = true)
+butcherBlockTopLayer = butcherBlockPart
+  |> translate(x = baseLength / 2, z = butcherBlockCenterZ, global = true)
+shallowMetalChipTray = chipTrayPart
+  |> translate(x = baseLength / 2, z = chipTrayFloorCenterZ, global = true)
+transparentLatheFootprintEnvelope = latheEnvelopePart
+  |> translate(x = baseLength / 2, z = chipTrayTopZ + latheEnvelopeHeight / 2, global = true)
+spindleCenterlineReferenceAxis = spindleCenterlinePart
+  |> translate(x = baseLength / 2, z = targetSpindleCenterHeight, global = true)
+
+frontLeftReinforcedLevelingFootBlock = levelingFootBlockPart
+  |> translate(
+       x = levelingBlockInsetX,
+       y = -levelingBlockCenterY,
+       z = levelingBlockHeight / 2,
+       global = true,
+     )
+frontRightReinforcedLevelingFootBlock = clone(frontLeftReinforcedLevelingFootBlock)
+  |> translate(x = baseLength - (2 * levelingBlockInsetX), global = true)
+rearLeftReinforcedLevelingFootBlock = clone(frontLeftReinforcedLevelingFootBlock)
+  |> translate(y = 2 * levelingBlockCenterY, global = true)
+rearRightReinforcedLevelingFootBlock = clone(frontRightReinforcedLevelingFootBlock)
+  |> translate(y = 2 * levelingBlockCenterY, global = true)
+reservedLowerCentralBottleJackCasterEnvelope = reservedChassisEnvelopePart
+  |> translate(x = baseLength / 2, z = reservedEnvelopeBottomZ + reservedEnvelopeHeight / 2, global = true)
+
+export plywoodLathePlinthAssembly = flatten([
+  leftDoubledTrapezoidalCheekPanel,
+  rightDoubledTrapezoidalCheekPanel,
+  lowerBallastShelf,
+  fullRearShearPanel,
+  doubledPlywoodTopDeck,
+  butcherBlockTopLayer,
+  shallowMetalChipTray,
+  transparentLatheFootprintEnvelope,
+  spindleCenterlineReferenceAxis,
+  frontLeftReinforcedLevelingFootBlock,
+  rearLeftReinforcedLevelingFootBlock,
+  frontRightReinforcedLevelingFootBlock,
+  rearRightReinforcedLevelingFootBlock,
+  reservedLowerCentralBottleJackCasterEnvelope
+])
+
+plywoodLathePlinthAssembly

@@ -1,0 +1,22 @@
+// Four-piece butcher-block layer; retains front/rear bridges around the belt chase.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+leftSection = clone(unitBox)
+  |> scale(x = leftTopSectionLength / 1in, y = topDepth / 1in, z = butcherBlockThickness / 1in, global = true)
+  |> translate(x = -baseLength / 2 + leftTopSectionLength / 2, global = true)
+  |> appearance(color = butcherBlockColor, roughness = 70, metalness = 0)
+rightSection = clone(unitBox)
+  |> scale(x = rightTopSectionLength / 1in, y = topDepth / 1in, z = butcherBlockThickness / 1in, global = true)
+  |> translate(x = driveChaseCenterX + driveChaseWidth / 2 - baseLength / 2 + rightTopSectionLength / 2, global = true)
+  |> appearance(color = butcherBlockColor, roughness = 70, metalness = 0)
+frontChaseBridge = clone(unitBox)
+  |> scale(x = driveChaseWidth / 1in, y = chaseBridgeDepth / 1in, z = butcherBlockThickness / 1in, global = true)
+  |> translate(x = driveChaseCenterX - baseLength / 2, y = -topDepth / 2 + chaseBridgeDepth / 2, global = true)
+  |> appearance(color = butcherBlockColor, roughness = 70, metalness = 0)
+rearChaseBridge = clone(frontChaseBridge)
+  |> translate(y = topDepth - chaseBridgeDepth, global = true)
+
+export butcherBlockExport = flatten([leftSection, rightSection, frontChaseBridge, rearChaseBridge])

@@ -1,0 +1,17 @@
+// Spindle centerline reference axis
+// Thin red cylinder running along the base X axis at target spindle height.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitCylinderXExport as unitCylinderX from "unitCylinderX.kcl"
+
+spindleCenterlinePart = clone(unitCylinderX)
+  |> scale(
+       x = spindleAxisLength / 1in,
+       y = spindleAxisDiameter / 1in,
+       z = spindleAxisDiameter / 1in,
+       global = true,
+     )
+  |> appearance(color = referenceColor, roughness = 30, metalness = 20)
+
+export spindleCenterlineExport = spindleCenterlinePart

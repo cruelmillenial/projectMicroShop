@@ -1,0 +1,38 @@
+// Doubled trapezoidal cheek panel
+// Centered Y-Z profile with outward-splayed front and rear lower feet.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+
+cheekProfileSketch = sketch(on = YZ) {
+  bottomEdge = line(start = [var -15in, var -17in], end = [var 15in, var -17in])
+  rearSlope = line(start = [var 15in, var -17in], end = [var 12in, var 17in])
+  topEdge = line(start = [var 12in, var 17in], end = [var -12in, var 17in])
+  frontSlope = line(start = [var -12in, var 17in], end = [var -15in, var -17in])
+
+  coincident([bottomEdge.end, rearSlope.start])
+  coincident([rearSlope.end, topEdge.start])
+  coincident([topEdge.end, frontSlope.start])
+  coincident([frontSlope.end, bottomEdge.start])
+  coincident([bottomEdge.start, [-15in, -17in]])
+  horizontal(bottomEdge)
+  horizontal(topEdge)
+  horizontalDistance([bottomEdge.start, bottomEdge.end]) == bottomDepth
+  horizontalDistance([topEdge.end, topEdge.start]) == topDepth
+  verticalDistance([bottomEdge.start, frontSlope.start]) == cheekHeight
+  horizontalDistance([bottomEdge.start, topEdge.end]) == (bottomDepth - topDepth) / 2
+}
+
+cheekProfileRegion = region(
+  segments = [
+    cheekProfileSketch.bottomEdge,
+    cheekProfileSketch.rearSlope
+  ],
+  intersectionIndex = -1,
+  direction = CCW,
+)
+cheekPanelPart = extrude(cheekProfileRegion, length = cheekPanelThickness, symmetric = true)
+  |> appearance(color = plywoodColor, roughness = 72, metalness = 0)
+cheekProfileSketchHidden = hide(cheekProfileSketch)
+
+export cheekPanelExport = cheekPanelPart

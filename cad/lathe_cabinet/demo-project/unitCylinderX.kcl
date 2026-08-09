@@ -1,0 +1,20 @@
+// Unit X-axis cylinder primitive
+// Origin-centered solver cylinder for the spindle reference axis.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+unitCylinderSketch = sketch(on = YZ) {
+  cylinderEdge = circle(start = [var 0.5in, var 0in], center = [var 0in, var 0in])
+
+  coincident([cylinderEdge.center, ORIGIN])
+  horizontal([
+    cylinderEdge.start,
+    cylinderEdge.center
+  ])
+  radius(cylinderEdge) == 0.5in
+}
+
+unitCylinderRegion = region(segments = [unitCylinderSketch.cylinderEdge])
+unitCylinderBody = extrude(unitCylinderRegion, length = 1in, symmetric = true)
+unitCylinderSketchHidden = hide(unitCylinderSketch)
+
+export unitCylinderXExport = unitCylinderBody

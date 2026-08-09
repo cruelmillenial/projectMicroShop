@@ -1,0 +1,98 @@
+#!/bin/sh
+
+set -eu
+
+usage() {
+    cat <<'EOF'
+Usage: tools/cad-export [KCL_PROJECT [OUTPUT_DIR]]
+
+Export a KCL project to a deterministic STEP file and validate the result.
+
+Defaults:
+  KCL_PROJECT  lathe_cabinet/motor-under-lathe
+  OUTPUT_DIR   KCL_PROJECT/exports
+
+Set ZOO_BIN to select a specific Zoo CLI executable.
+EOF
+}
+
+case "${1:-}" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+esac
+
+if [ "$#" -gt 2 ]; then
+    usage >&2
+    exit 2
+fi
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+repo_dir=$(CDPATH= cd -- "$script_dir/.." && pwd)
+project=${1:-lathe_cabinet/motor-under-lathe}
+
+case "$project" in
+    /*) ;;
+    *) project="$repo_dir/$project" ;;
+esac
+
+if [ ! -f "$project/main.kcl" ]; then
+    echo "error: KCL project does not contain main.kcl: $project" >&2
+    exit 1
+fi
+
+if [ "$#" -ge 2 ]; then
+    output_dir=$2
+    case "$output_dir" in
+        /*) ;;
+        *) output_dir="$repo_dir/$output_dir" ;;
+    esac
+else
+    output_dir="$project/exports"
+fi
+
+if [ -n "${ZOO_BIN:-}" ]; then
+    zoo_bin=$ZOO_BIN
+elif [ -x "$repo_dir/.tools/bin/zoo" ]; then
+    zoo_bin="$repo_dir/.tools/bin/zoo"
+else
+    zoo_bin=$(command -v zoo || true)
+fi
+
+if [ -z "$zoo_bin" ] || [ ! -x "$zoo_bin" ]; then
+    echo "error: Zoo CLI not found; install zoo or set ZOO_BIN" >&2
+    exit 1
+fi
+
+mkdir -p -- "$output_dir"
+target="$output_dir/output.step"
+
+if [ -e "$target" ] && ! sed -n '1p' "$target" | grep -qx 'ISO-10303-21;'; then
+    echo "error: refusing to replace a non-STEP file: $target" >&2
+    exit 1
+fi
+
+temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/cad-export.XXXXXX")
+trap 'rm -rf -- "$temp_dir"' EXIT HUP INT TERM
+
+"$zoo_bin" kcl export \
+    --deterministic \
+    --output-format=step \
+    "$project" \
+    "$temp_dir"
+
+generated="$temp_dir/output.step"
+if [ ! -s "$generated" ]; then
+    echo "error: Zoo did not produce a nonempty output.step" >&2
+    exit 1
+fi
+
+if ! sed -n '1p' "$generated" | grep -qx 'ISO-10303-21;'; then
+    echo "error: Zoo output does not have a STEP header" >&2
+    exit 1
+fi
+
+mv -- "$generated" "$target"
+size=$(wc -c < "$target" | tr -d ' ')
+echo "Exported STEP: $target ($size bytes)"

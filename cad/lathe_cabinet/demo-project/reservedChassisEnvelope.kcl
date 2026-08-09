@@ -1,0 +1,22 @@
+// Reserved caster chassis envelope
+// Transparent lower-center keep-out for a bottle-jack or drop-down caster frame.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+reservedChassisEnvelopePart = clone(unitBox)
+  |> scale(
+       x = reservedEnvelopeLength / 1in,
+       y = reservedEnvelopeDepth / 1in,
+       z = reservedEnvelopeHeight / 1in,
+       global = true,
+     )
+  |> appearance(
+       color = reservedEnvelopeColor,
+       roughness = 35,
+       metalness = 5,
+       opacity = 24,
+     )
+
+export reservedChassisEnvelopeExport = reservedChassisEnvelopePart

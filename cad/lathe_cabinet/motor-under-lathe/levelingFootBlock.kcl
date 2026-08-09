@@ -1,0 +1,17 @@
+// Reinforced leveling foot block
+// One plywood reinforcement block reused at each lower cheek corner.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+levelingFootBlockPart = clone(unitBox)
+  |> scale(
+       x = levelingBlockLength / 1in,
+       y = levelingBlockDepth / 1in,
+       z = levelingBlockHeight / 1in,
+       global = true,
+     )
+  |> appearance(color = footBlockColor, roughness = 76, metalness = 0)
+
+export levelingFootBlockExport = levelingFootBlockPart

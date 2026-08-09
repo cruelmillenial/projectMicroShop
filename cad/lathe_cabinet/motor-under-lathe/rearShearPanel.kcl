@@ -1,0 +1,17 @@
+// Full rear shear panel
+// Plywood shear panel spanning between cheeks from the lower shelf to the deck.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+rearShearPanelPart = clone(unitBox)
+  |> scale(
+       x = interiorLength / 1in,
+       y = rearShearPanelThickness / 1in,
+       z = rearShearPanelHeight / 1in,
+       global = true,
+     )
+  |> appearance(color = rearPanelColor, roughness = 76, metalness = 0)
+
+export rearShearPanelExport = rearShearPanelPart

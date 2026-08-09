@@ -1,0 +1,9 @@
+// Transparent belt/service chase; guard this opening in the fabricated cabinet.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+driveChaseEnvelopePart = clone(unitBox)
+  |> scale(x = driveChaseWidth / 1in, y = driveChaseDepth / 1in, z = driveChaseHeight / 1in, global = true)
+  |> appearance(color = driveChaseColor, roughness = 28, metalness = 8, opacity = 22)
+export driveChaseEnvelopeExport = driveChaseEnvelopePart

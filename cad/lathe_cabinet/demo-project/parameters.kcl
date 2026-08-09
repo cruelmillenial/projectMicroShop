@@ -1,0 +1,57 @@
+// Plywood lathe plinth parameters
+// Shared inch dimensions, derived elevations, envelopes, and finishes.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+export baseLength = 48in
+export topDepth = 24in
+export bottomDepth = 30in
+export cheekPanelThickness = 1.5in
+export plywoodThickness = 0.75in
+export topDeckThickness = 1.5in
+export butcherBlockThickness = 1.5in
+export chipTrayThickness = 0.06in
+export chipTrayLipHeightRear = 1.5in
+export chipTrayLipHeightSides = 1.5in
+export chipTrayLipHeightFront = 0.5in
+export rearShearPanelThickness = 0.75in
+export lowerShelfHeight = 8in
+export targetSpindleCenterHeight = 44in
+export latheCenterHeightAboveMountingSurface = 7in
+export finishedMountingSurfaceHeight = targetSpindleCenterHeight - latheCenterHeightAboveMountingSurface
+
+export cheekHeight = 34in
+export interiorLength = baseLength - (2 * cheekPanelThickness)
+export lowerShelfDepth = 24in
+export lowerShelfTopZ = lowerShelfHeight
+export rearShearPanelHeight = cheekHeight - lowerShelfTopZ
+export topDeckCenterZ = cheekHeight + topDeckThickness / 2
+export butcherBlockCenterZ = cheekHeight + topDeckThickness + butcherBlockThickness / 2
+export chipTrayFloorCenterZ = finishedMountingSurfaceHeight + chipTrayThickness / 2
+export chipTrayTopZ = finishedMountingSurfaceHeight + chipTrayThickness
+
+export latheEnvelopeLength = 42in
+export latheEnvelopeDepth = 18in
+export latheEnvelopeHeight = 6.5in
+export spindleAxisDiameter = 0.125in
+export spindleAxisLength = 46in
+
+export levelingBlockLength = 6in
+export levelingBlockDepth = 6in
+export levelingBlockHeight = 3in
+export levelingBlockInsetX = levelingBlockLength / 2
+export levelingBlockCenterY = bottomDepth / 2 - (levelingBlockDepth / 2)
+
+export reservedEnvelopeLength = 24in
+export reservedEnvelopeDepth = 14in
+export reservedEnvelopeHeight = 6in
+export reservedEnvelopeBottomZ = 0.5in
+
+export plywoodColor = "#c89f68"
+export shelfColor = "#d6b37a"
+export rearPanelColor = "#b98955"
+export butcherBlockColor = "#a96f38"
+export trayColor = "#87939d"
+export latheEnvelopeColor = "#4d93c8"
+export referenceColor = "#d94b43"
+export footBlockColor = "#7d5734"
+export reservedEnvelopeColor = "#e49a3a"

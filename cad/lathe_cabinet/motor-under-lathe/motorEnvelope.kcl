@@ -1,0 +1,9 @@
+// Transparent motor keep-out; size from actual motor and mounting hardware.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+motorEnvelopePart = clone(unitBox)
+  |> scale(x = motorEnvelopeLength / 1in, y = motorEnvelopeDepth / 1in, z = motorEnvelopeHeight / 1in, global = true)
+  |> appearance(color = motorEnvelopeColor, roughness = 32, metalness = 45, opacity = 34)
+export motorEnvelopeExport = motorEnvelopePart

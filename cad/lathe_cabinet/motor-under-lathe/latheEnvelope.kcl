@@ -1,0 +1,22 @@
+// Transparent lathe footprint envelope
+// Centered rectangular machine-space envelope above the chip tray.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+latheEnvelopePart = clone(unitBox)
+  |> scale(
+       x = latheEnvelopeLength / 1in,
+       y = latheEnvelopeDepth / 1in,
+       z = latheEnvelopeHeight / 1in,
+       global = true,
+     )
+  |> appearance(
+       color = latheEnvelopeColor,
+       roughness = 25,
+       metalness = 5,
+       opacity = 26,
+     )
+
+export latheEnvelopeExport = latheEnvelopePart

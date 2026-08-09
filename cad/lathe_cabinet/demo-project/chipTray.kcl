@@ -1,0 +1,52 @@
+// Shallow metal chip tray
+// Grouped sheet-metal floor with low front lip and taller rear and end lips.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+trayFloor = clone(unitBox)
+  |> scale(
+       x = baseLength / 1in,
+       y = topDepth / 1in,
+       z = chipTrayThickness / 1in,
+       global = true,
+     )
+  |> appearance(color = trayColor, roughness = 38, metalness = 82)
+rearLip = clone(unitBox)
+  |> scale(
+       x = baseLength / 1in,
+       y = chipTrayThickness / 1in,
+       z = chipTrayLipHeightRear / 1in,
+       global = true,
+     )
+  |> translate(y = topDepth / 2 - (chipTrayThickness / 2), z = (chipTrayLipHeightRear - chipTrayThickness) / 2, global = true)
+  |> appearance(color = trayColor, roughness = 38, metalness = 82)
+frontLip = clone(unitBox)
+  |> scale(
+       x = baseLength / 1in,
+       y = chipTrayThickness / 1in,
+       z = chipTrayLipHeightFront / 1in,
+       global = true,
+     )
+  |> translate(y = -topDepth / 2 + chipTrayThickness / 2, z = (chipTrayLipHeightFront - chipTrayThickness) / 2, global = true)
+  |> appearance(color = trayColor, roughness = 38, metalness = 82)
+leftSideLip = clone(unitBox)
+  |> scale(
+       x = chipTrayThickness / 1in,
+       y = topDepth / 1in,
+       z = chipTrayLipHeightSides / 1in,
+       global = true,
+     )
+  |> translate(x = -baseLength / 2 + chipTrayThickness / 2, z = (chipTrayLipHeightSides - chipTrayThickness) / 2, global = true)
+  |> appearance(color = trayColor, roughness = 38, metalness = 82)
+rightSideLip = clone(leftSideLip)
+  |> translate(x = baseLength - chipTrayThickness, global = true)
+
+export chipTrayExport = flatten([
+  trayFloor,
+  rearLip,
+  frontLip,
+  leftSideLip,
+  rightSideLip
+])

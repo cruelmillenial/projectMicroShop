@@ -1,0 +1,9 @@
+// Doubled motor mounting pad on the lower ballast shelf.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+motorShelfPart = clone(unitBox)
+  |> scale(x = motorShelfLength / 1in, y = motorShelfDepth / 1in, z = motorShelfThickness / 1in, global = true)
+  |> appearance(color = motorShelfColor, roughness = 74, metalness = 0)
+export motorShelfExport = motorShelfPart

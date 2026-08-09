@@ -1,0 +1,17 @@
+// Butcher block top layer
+// Full-length hardwood mounting layer above the doubled plywood deck.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+butcherBlockPart = clone(unitBox)
+  |> scale(
+       x = baseLength / 1in,
+       y = topDepth / 1in,
+       z = butcherBlockThickness / 1in,
+       global = true,
+     )
+  |> appearance(color = butcherBlockColor, roughness = 66, metalness = 0)
+
+export butcherBlockExport = butcherBlockPart

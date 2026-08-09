@@ -1,0 +1,17 @@
+// Lower ballast shelf
+// Full-width internal plywood shelf captured between the cheek panels.
+@settings(defaultLengthUnit = in, kclVersion = 2.0)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unitBox.kcl"
+
+lowerBallastShelfPart = clone(unitBox)
+  |> scale(
+       x = interiorLength / 1in,
+       y = lowerShelfDepth / 1in,
+       z = plywoodThickness / 1in,
+       global = true,
+     )
+  |> appearance(color = shelfColor, roughness = 74, metalness = 0)
+
+export lowerBallastShelfExport = lowerBallastShelfPart
