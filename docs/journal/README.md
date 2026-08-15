@@ -8,6 +8,11 @@ The repository already contains engineering records: issues, checkpoints, standa
 
 The journal is intended to be publicly readable.
 
+## Start Here
+
+- Monthly journal entries in this directory preserve the chronological project narrative.
+- [Shop Wall](SHOP_WALL.md) preserves short remarks, accidental one-liners, and bits of project philosophy worth retaining outside the formal engineering record.
+
 ## Format
 
 Entries are maintained as rolling monthly files under `docs/journal/`.
@@ -45,6 +50,7 @@ When private source material informs an entry, extract only the engineering-rele
 ## Relationship to Other Records
 
 - **Journal:** public narrative and project evolution.
+- **Shop Wall:** memorable project marginalia and ideas that are suggestive but non-normative.
 - **README:** stable purpose and local doctrine.
 - **STATUS:** current handoff state and next actions.
 - **Checkpoint:** technically meaningful state capture.
