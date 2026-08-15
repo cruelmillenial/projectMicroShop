@@ -4,6 +4,14 @@ Project MicroShop is a portable workshop architecture for constrained indoor env
 
 The system is conceived as a modular infrastructure platform for fabrication, repair, electronics work, tooling support, and small-scale manufacturing.
 
+## Start Here
+
+**[Project Journal](docs/journal/README.md)** — Follow the MicroShop through builds, decisions, dead ends, capability milestones, and changes in direction.
+
+**[Shop Wall](docs/journal/SHOP_WALL.md)** — Memorable project marginalia, accidental one-liners, and ideas worth preserving outside the formal engineering record.
+
+**CAD & Builds** — Engineering artifacts and reusable design infrastructure live under [`cad/`](cad/), with formal project documentation under [`docs/`](docs/).
+
 ## Core Objective
 
 Design and iteratively refine a workshop system that can be:
