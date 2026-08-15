@@ -48,6 +48,8 @@ Conceptually:
 
 The machine interface and tool profile shall be independently replaceable.
 
+This architecture is the first concrete test of the broader "machine accessory API" idea preserved in `docs/journal/SHOP_WALL.md`: measured machine interfaces and explicit datums may eventually allow reusable parametric accessory families to behave like downloadable machine-tool body parts. Treat that as an architectural hypothesis to be validated through repeated real accessories, not as a formal API specification at this stage.
+
 MACHINE INTERFACE OPTIONS
 
 Support at least conceptual variants for:
